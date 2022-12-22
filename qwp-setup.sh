@@ -117,4 +117,4 @@ sudo sed -i "s/SECURE_AUTH_SALT', .* $PARTITION_COLUMN.*/SECURE_AUTH_SALT', '$F_
 sudo sed -i "s/LOGGED_IN_SALT',   .* $PARTITION_COLUMN.*/LOGGED_IN_SALT', '$G_LOG_SALT');/" $FILE #AUTH SALT
 sudo sed -i "s/NONCE_SALT',       .* $PARTITION_COLUMN.*/NONCE_SALT', '$H_N_SALT');/" $FILE #AUTH KEY
 
-echo -e "\n --> Everything setup! Navigate to $A_RECORD"
+echo -e "\n --> Everything setup! Navigate to http://$A_RECORD:80"
