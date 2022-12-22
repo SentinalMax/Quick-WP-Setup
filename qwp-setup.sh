@@ -23,9 +23,9 @@ echo " --> Installing MySQL Server" && sudo apt install mysql-server -y
 
 #apache2 configuration
 echo -e "\n" && echo -e "Follow the prompts below to configure your Apache2 webserver! \n"
-echo -n "Your website name (A/ROOT RECORD): " && read -r A_RECORD
+echo -n "Your website name (A/ROOT RECORD for local install type 'localhost'): " && read -r A_RECORD
 #echo -n "Your website's CNAME: " && read -r CNAME_RECORD
-echo -n "Your server admin's email (click enter for default): " && read -r ADMIN_EMAIL
+echo -n "Your server admin's email (populate this will a valid email): " && read -r ADMIN_EMAIL
 
 echo " --> Configuring apache2"
 
@@ -57,8 +57,8 @@ fi
 # mysql configuration
 echo -e "\n" && echo -e "Follow the prompts below to configure your MySQL database! \n"
 echo -n "MySQL root password: " && read -r ROOT_PASS
-echo -n "wordpress user, name (what the wp user should be labeled as in your db): " && read -r WPUSER_NAME
-echo -n "wordpress user, password: " && read -r WPUSER_PASS
+echo -n "wordpress user, name (in database): " && read -r WPUSER_NAME
+echo -n "wordpress user, password (in database): " && read -r WPUSER_PASS
 
 sudo mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password by '$ROOT_PASS';";
 sudo mysql -u root -p$ROOT_PASS -e "CREATE USER '$WPUSER_NAME'@localhost IDENTIFIED BY '$WPUSER_PASS';";
