@@ -46,3 +46,18 @@ sed -e (-e is to escape characters so thats been fed into a command)
 
 TO DO:
 CNAME CONFIG WITH SED
+
+REMOVED:
+OUTPUT_1="$(who | awk '{print $1}')"
+
+if [[ -n $OUTPUT_1 ]]
+then
+	echo " --> Setting owner of non critical WP files to $OUTPUT_1"
+	sudo chown $OUTPUT_1:$OUTPUT_1  -R * # Let a useraccount be owner
+else
+	echo " --> Owner defaulting to current ROOT user (WARNING, BE SURE TO CHANGE THIS!)"
+	sudo chown root:root  -R * # If this is overriden it's because the program couldn't find any other user accounts running, so perms were given to root. Be sure to change this!
+fi
+sudo chown www-data:www-data -R /var/www/html/wordpress # Let apache be owner of wordpress dir
+
+IMPROPER FILE PERMS
