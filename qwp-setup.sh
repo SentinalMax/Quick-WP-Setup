@@ -19,6 +19,35 @@ fi
 echo " --> Installing PHP dependencies" && sudo apt install php libapache2-mod-php php-mysql php-curl php-dompdf php-imagick php-mbstring php-zip php-intl php-gd -y
 echo " --> Installing MySQL Server" && sudo apt install mysql-server -y
 
+#apache2 configuration
+echo -e "\n" && echo -e "Follow the prompts below to configure your Apache2 webserver! \n"
+echo -n "Your website name (A/ROOT RECORD): " && read -r A_RECORD
+#echo -n "Your website's CNAME: " && read -r CNAME_RECORD
+echo -n "Your server admin's email (click enter for default): " && read -r ADMIN_EMAIL
+
+echo " --> Configuring apache2"
+
+if [ ! -f "/etc/apache2/apache2.conf" ] ; then
+	echo " --> Error in apache configuration, maybe out of date / or not installed?" && exit
+else
+	echo " --> Making a duplicate of '000-default.conf' called 'mywebsite.conf'"
+	sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/mywebsite.conf
+	WEB_CONFIG=/etc/apache2/sites-available/mywebsite.conf
+
+	echo " --> Writing to new apache configuration file with your information"
+	WEB_ROOT=$(echo "/var/www/html/wordpress" | sed -e 's/[]\/$*.^[]/\\&/g')
+	sudo sed -i 's/webmaster@localhost/'$ADMIN_EMAIL'/' $WEB_CONFIG
+	sudo sed -i 's/DocumentRoot.*/DocumentRoot '$WEB_ROOT'/' $WEB_CONFIG
+	sudo sed -i 's/#ServerName.*/ServerName '$A_RECORD'/' $WEB_CONFIG
+	#DO CNAME CONFIG HERE
+	echo " --> Enabling your configuration"
+	sudo a2ensite mywebsite.conf
+	echo " --> Disabling the default config file in 'sites-enabled'"
+	sudo a2dissite 000-default.conf
+	echo " --> Restarting apache2.service" && sudo service apache2 restart
+	
+fi
+
 # mysql configuration
 echo -e "\n" && echo -e "Follow the prompts below to configure your MySQL database! \n"
 echo -n "MySQL root password: " && read -r ROOT_PASS
