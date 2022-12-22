@@ -27,14 +27,20 @@ ATTEMPT TO CURL:
 #https://www.mysqltutorial.org/mysql-show-users/
 #https://snipplr.com/view/15626/apache2--enabling-and-disabling-sites
 #https://askubuntu.com/questions/629995/apache-not-able-to-restart
+#https://askubuntu.com/questions/256013/apache-error-could-not-reliably-determine-the-servers-fully-qualified-domain-n
+
+
+sudo sed -i 's/#ServerName.*/ServerName '$A_RECORD'/' $WEB_CONFIG #OLD TEST
 
 # CURL WP PAGE FOR SALTS?
 
-#DEBUGGING: sudo apt-get purge mysql-server mysql-client mysql-common mysql-server-core-* mysql-client-core-* -y && sudo rm -rf /etc/mysql /var/lib/mysql -y
-#DEBUGGING: sudo apt remove openssl apache2 -y
+#DEBUGGING: 
+sudo apt-get purge mysql-server mysql-client mysql-common mysql-server-core-* mysql-client-core-* -y
+sudo rm -rf /etc/mysql /var/lib/mysql
+sudo apt remove openssl apache2 -y
 sudo rm -r /var/www/html/wordpress
-sudo apt-get purge apache2
 
+sudo apt-get remove --purge apache2
 
 sed -e (-e is to escape characters so thats been fed into a command)
 

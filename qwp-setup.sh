@@ -18,7 +18,7 @@ else
 	echo " --> Wordpress already installed, continuing installation"
 fi
 
-echo " --> Installing PHP dependencies" && sudo apt install php libapache2-mod-php php-mysql php-curl php-dompdf php-imagick php-mbstring php-zip php-intl php-gd -y
+echo " --> Installing PHP dependencies" && sudo apt install php libapache2-mod-php php-mysql php-curl php-dompdf php-imagick php-mbstring php-zip php-intl php-gd php-json -y
 echo " --> Installing MySQL Server" && sudo apt install mysql-server -y
 
 #apache2 configuration
@@ -40,12 +40,17 @@ else
 	WEB_ROOT=$(echo "/var/www/html/wordpress" | sed -e 's/[]\/$*.^[]/\\&/g')
 	sudo sed -i 's/webmaster@localhost/'$ADMIN_EMAIL'/' $WEB_CONFIG
 	sudo sed -i 's/DocumentRoot.*/DocumentRoot '$WEB_ROOT'/' $WEB_CONFIG
-	sudo sed -i 's/#ServerName.*/ServerName '$A_RECORD'/' $WEB_CONFIG
 	#DO CNAME CONFIG HERE
 	echo " --> Enabling your configuration"
 	sudo a2ensite mywebsite.conf
 	echo " --> Disabling the default config file in 'sites-enabled'"
 	sudo a2dissite 000-default.conf
+
+	sudo touch /etc/apache2/conf-available/servername.conf
+	sudo echo "ServerName $A_RECORD" > /etc/apache2/conf-available/servername.conf
+	sudo echo "ServerName $A_RECORD" | sudo tee /etc/apache2/conf-available/servername.conf
+	sudo a2enconf servername
+
 	echo " --> Restarting apache2.service" && sudo service apache2 restart
 fi
 
@@ -73,6 +78,7 @@ sudo sed -i 's/password_here/'$WPUSER_PASS'/' $FILE
 
 echo " --> Configure wordpress communications"
 echo "define( 'FS_METHOD', 'direct' );" >> $FILE
+echo "define('WP_MEMORY_LIMIT', '64M'); ?>" >> $FILE
 
 echo " --> Setting permissions"
 cd /var/www/html/wordpress
@@ -100,7 +106,7 @@ OUTPUT_2="$(openssl version)"
 if [[ -n $OUTPUT_2 ]]
 then
     printf "%s\n" "$OUTPUT_2"
-    echo " --> OpenSSL is already installed!"
+    echo " --> OpenSSL is already installed! Generating salts..."
 else
     echo " --> Installing OpenSSL & dependencies" && sudo apt install build-essential checkinstall zlib1g-dev openssl -y
 fi
@@ -122,3 +128,5 @@ sudo sed -i "s/AUTH_SALT',        .* $PARTITION_COLUMN.*/AUTH_SALT', '$E_AUTH_SA
 sudo sed -i "s/SECURE_AUTH_SALT', .* $PARTITION_COLUMN.*/SECURE_AUTH_SALT', '$F_SEC_AUTH_SALT');/" $FILE #NONCE KEY
 sudo sed -i "s/LOGGED_IN_SALT',   .* $PARTITION_COLUMN.*/LOGGED_IN_SALT', '$G_LOG_SALT');/" $FILE #AUTH SALT
 sudo sed -i "s/NONCE_SALT',       .* $PARTITION_COLUMN.*/NONCE_SALT', '$H_N_SALT');/" $FILE #AUTH KEY
+
+echo -e "\n --> Everything setup! Navigate to $A_RECORD"
