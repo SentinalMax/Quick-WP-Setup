@@ -44,14 +44,32 @@ sudo sed -i 's/password_here/'$WPUSER_PASS'/' $FILE
 echo " ->Configure wordpress communications"
 echo "define( 'FS_METHOD', 'direct' );" >> $FILE
 
-echo " ->Curling salts and appending them to wp-config.php"
+echo " ->Setting permissions"
+cd /var/www/html/wordpress
+sudo chown www-data:www-data  -R * # Let Apache be owner
+sudo find . -type d -exec chmod 755 {} \;  # Change directory permissions rwxr-xr-x
+sudo find . -type f -exec chmod 644 {} \;  # Change file permissions rw-r--r--
+
+OUTPUT_1="$(who | awk '{print $1}')"
+
+if [[ -n $OUTPUT_1 ]]
+then
+	echo " ->Setting owner of non critical WP files to $OUTPUT_1"
+	sudo chown $OUTPUT_1:$OUTPUT_1  -R * # Let a useraccount be owner
+else
+	echo " ->Owner defaulting to current ROOT user (WARNING, BE SURE TO CHANGE THIS!)"
+	sudo chown root:root  -R * # If this is overriden it's because the program couldn't find any other user accounts running, so perms were given to root. Be sure to change this!
+fi
+sudo chown www-data:www-data wp-content # Let apache be owner of wp-content
+
+echo " ->Generating salts and appending them to wp-config.php"
 #sudo apt install curl #curl is installed by default
 
-OUTPUT="$(openssl version)"
+OUTPUT_2="$(openssl version)"
 
-if [[ -n $OUTPUT ]]
+if [[ -n $OUTPUT_2 ]]
 then
-    printf "%s\n" "$OUTPUT"
+    printf "%s\n" "$OUTPUT_2"
     echo " ->OpenSSL is already installed!"
 else
     echo " -> Installing OpenSSL & dependencies" && sudo apt install build-essential checkinstall zlib1g-dev openssl -y

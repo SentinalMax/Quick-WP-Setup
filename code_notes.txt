@@ -24,6 +24,7 @@ ATTEMPT TO CURL:
 #https://sed.js.org/
 #https://www.baeldung.com/linux/find-replace-text-in-file
 #https://www.howtogeek.com/howto/30184/10-ways-to-generate-a-random-password-from-the-command-line/
+#https://www.mysqltutorial.org/mysql-show-users/
 
 # CURL WP PAGE FOR SALTS?
 
