@@ -1,1 +1,2 @@
 # Quick-WP-Setup
+version: 
