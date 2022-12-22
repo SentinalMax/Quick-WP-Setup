@@ -1,5 +1,7 @@
 qwpsetup notes:
 
+ATTEMPT TO CURL:
+
 #A_AUTH_KEY=$(sudo curl https://api.wordpress.org/secret-key/1.1/salt/ | grep -w "AUTH_KEY" | awk '{print $2}')
 #B_SEC_AUTH_KEY=$(sudo curl https://api.wordpress.org/secret-key/1.1/salt/ | grep -w "SECURE_AUTH_KEY" | awk '{print $2}')
 #C_LOG_KEY=$(sudo curl https://api.wordpress.org/secret-key/1.1/salt/ | grep -w "LOGGED_IN_KEY" | awk '{print $2}')
@@ -8,6 +10,7 @@ qwpsetup notes:
 #F_SEC_AUTH_SALT=$(sudo curl https://api.wordpress.org/secret-key/1.1/salt/ | grep -w "SECURE_AUTH_SALT" | awk '{print $2}')
 #G_LOG_SALT=$(sudo curl https://api.wordpress.org/secret-key/1.1/salt/ | grep -w "LOGGED_IN_SALT" | awk '{print $2}')
 #H_N_SALT=$(sudo curl https://api.wordpress.org/secret-key/1.1/salt/ | grep -w "NONCE_SALT" | awk '{print $2}')
+
 #cat $A_AUTH_KEY
 #cat $B_SEC_AUTH_KEY
 #cat $C_LOG_KEY
@@ -20,8 +23,9 @@ qwpsetup notes:
 #sed "s/, $PARTITION_COLUMN.*/, 'PINEAPPLE');/"
 #https://sed.js.org/
 #https://www.baeldung.com/linux/find-replace-text-in-file
+#https://www.howtogeek.com/howto/30184/10-ways-to-generate-a-random-password-from-the-command-line/
 
-# CURL PAGE FOR SALTS?
+# CURL WP PAGE FOR SALTS?
 
 #DEBUGGING: sudo apt-get purge mysql-server mysql-client mysql-common mysql-server-core-* mysql-client-core-* -y && sudo rm -rf /etc/mysql /var/lib/mysql -y
 #DEBUGGING: sudo apt remove openssl -y
