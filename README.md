@@ -1,2 +1,4 @@
 # Quick-WP-Setup
-version: 
+‘‘‘
+version: 1.14
+‘‘‘
