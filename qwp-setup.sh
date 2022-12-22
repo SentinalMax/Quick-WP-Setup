@@ -6,11 +6,13 @@ if [ "$EUID" -ne 0 ]
 	exit
 fi
 
-echo " --> Installing Apache2" && sudo apt install apache2 -y
+echo " --> Installing Apache2" && sudo apt-get install apache2 -y
+#sudo apt-get -o DPkg::Options::="--force-confmiss" --reinstall install apache2 #to reinstall apache2 configs
+#sudo /etc/init.d/apache2 reload
 
 if [ ! -d "/var/www/html/wordpress" ] ; then
 	echo " --> Wordpress DOES NOT exist, procceding to installation"
-	echo " --> Downloading wordpress" && wget http://wordpress.org/latest.tar.gz && tar xfz latest.tar.gz
+	echo " --> Downloading wordpress" && wget http://wordpress.org/latest.tar.gz --no-check-certificate && tar xfz latest.tar.gz
 	echo " --> Moving wordpress to /var/www/html" && sudo mv wordpress/ /var/www/html && sudo rm -r latest.tar.gz
 else
 	echo " --> Wordpress already installed, continuing installation"
@@ -28,7 +30,7 @@ echo -n "Your server admin's email (click enter for default): " && read -r ADMIN
 echo " --> Configuring apache2"
 
 if [ ! -f "/etc/apache2/apache2.conf" ] ; then
-	echo " --> Error in apache configuration, maybe out of date / or not installed?" && exit
+	echo " --> Error in apache configuration, maybe out of date / not installed / packages missing?" && exit
 else
 	echo " --> Making a duplicate of '000-default.conf' called 'mywebsite.conf'"
 	sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/mywebsite.conf
@@ -45,7 +47,6 @@ else
 	echo " --> Disabling the default config file in 'sites-enabled'"
 	sudo a2dissite 000-default.conf
 	echo " --> Restarting apache2.service" && sudo service apache2 restart
-	
 fi
 
 # mysql configuration

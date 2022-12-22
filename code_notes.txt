@@ -26,13 +26,15 @@ ATTEMPT TO CURL:
 #https://www.howtogeek.com/howto/30184/10-ways-to-generate-a-random-password-from-the-command-line/
 #https://www.mysqltutorial.org/mysql-show-users/
 #https://snipplr.com/view/15626/apache2--enabling-and-disabling-sites
+#https://askubuntu.com/questions/629995/apache-not-able-to-restart
 
 # CURL WP PAGE FOR SALTS?
 
 #DEBUGGING: sudo apt-get purge mysql-server mysql-client mysql-common mysql-server-core-* mysql-client-core-* -y && sudo rm -rf /etc/mysql /var/lib/mysql -y
 #DEBUGGING: sudo apt remove openssl apache2 -y
 sudo rm -r /var/www/html/wordpress
-sudo rm -r /etc/apache2
+sudo apt-get purge apache2
+
 
 sed -e (-e is to escape characters so thats been fed into a command)
 
