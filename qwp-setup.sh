@@ -6,6 +6,8 @@ if [ "$EUID" -ne 0 ]
 	exit
 fi
 
+echo "Q29weXdyaXRlIEFsZXggVmVyZ2FyYSAyMDIy" | base64 -d && echo -e "\n"
+
 echo " --> Installing Apache2" && sudo apt-get install apache2 -y
 #sudo apt-get -o DPkg::Options::="--force-confmiss" --reinstall install apache2 #to reinstall apache2 configs
 #sudo /etc/init.d/apache2 reload
